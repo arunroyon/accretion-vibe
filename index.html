@@ -11,8 +11,8 @@
     }
     body {
       background:
-        radial-gradient(circle at 20% 20%, rgba(8, 145, 178, 0.08), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(250, 204, 21, 0.05), transparent 28%),
+        radial-gradient(circle at 18% 16%, rgba(8, 145, 178, 0.09), transparent 30%),
+        radial-gradient(circle at 82% 8%, rgba(250, 204, 21, 0.06), transparent 26%),
         #000;
     }
     canvas {
@@ -20,8 +20,16 @@
       box-shadow: 0 0 24px rgba(34, 211, 238, 0.35), 0 0 80px rgba(14, 116, 144, 0.18);
       image-rendering: auto;
       background:
-        radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(0,0,0,0.9) 70%),
+        radial-gradient(circle at center, rgba(255,255,255,0.03), rgba(0,0,0,0.92) 72%),
         #000;
+    }
+    select,
+    input[type="range"] {
+      outline: none;
+    }
+    select {
+      background: rgba(24, 24, 27, 0.92);
+      border: 1px solid rgba(34, 211, 238, 0.22);
     }
     input[type="range"]::-webkit-slider-thumb {
       box-shadow: 0 0 12px rgba(103, 232, 249, 0.8);
@@ -33,28 +41,57 @@
     <canvas id="canvas" width="760" height="760" class="rounded-[2rem]"></canvas>
   </div>
 
-  <aside class="w-[24rem] bg-zinc-950/95 border-l border-cyan-400/40 p-7 flex flex-col backdrop-blur-sm">
-    <div class="mb-7">
+  <aside class="w-[25.5rem] bg-zinc-950/95 border-l border-cyan-400/40 p-7 flex flex-col backdrop-blur-sm">
+    <div class="mb-6">
       <h1 class="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-300 to-yellow-300">
         ACCRETION<span class="text-cyan-400">VIBE</span>
       </h1>
       <p class="text-[11px] uppercase tracking-[0.35em] text-cyan-400 mt-2">Herbig Ae/Be Star Disk Simulator</p>
       <p class="text-xs text-zinc-400 mt-3 leading-relaxed">
-        A more physical inner-rim + flared-disk visual with differential rotation, dust sublimation cavity, layered particle populations, and research-themed facts.
+        Now driven by luminosity-based dust sublimation, source presets, disk-geometry modes, slower inward drift, and optional wind or jet behavior.
       </p>
     </div>
 
-    <div class="space-y-6 flex-1 overflow-y-auto pr-1">
-      <div>
-        <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Rotation Scale</label>
-        <input type="range" id="speed" min="0.4" max="3.5" step="0.1" value="1.6" class="w-full accent-cyan-400">
-        <div id="speedVal" class="text-right text-sm font-mono text-zinc-300">1.6×</div>
+    <div class="space-y-5 flex-1 overflow-y-auto pr-1">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Source Mode</label>
+          <select id="mode" class="w-full rounded-xl px-3 py-3 text-sm text-zinc-200">
+            <option value="ae">Herbig Ae</option>
+            <option value="be">Herbig Be</option>
+            <option value="transitional">Transitional Disk</option>
+            <option value="uxor">UX Ori-like</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Disk Geometry</label>
+          <select id="geometry" class="w-full rounded-xl px-3 py-3 text-sm text-zinc-200">
+            <option value="flared">Flared</option>
+            <option value="shadowed">Self-shadowed</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Outflow</label>
+          <select id="outflow" class="w-full rounded-xl px-3 py-3 text-sm text-zinc-200">
+            <option value="none">None</option>
+            <option value="wind" selected>Disk Wind</option>
+            <option value="jet">Jet</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Rotation Scale</label>
+          <input type="range" id="speed" min="0.5" max="2.6" step="0.1" value="1.3" class="w-full accent-cyan-400 mt-2.5">
+          <div id="speedVal" class="text-right text-sm font-mono text-zinc-300 mt-1">1.3×</div>
+        </div>
       </div>
 
       <div>
         <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Accretion Drift</label>
-        <input type="range" id="inward" min="0" max="2.5" step="0.1" value="0.9" class="w-full accent-cyan-400">
-        <div id="inwardVal" class="text-right text-sm font-mono text-zinc-300">0.9</div>
+        <input type="range" id="inward" min="0" max="2.2" step="0.1" value="0.7" class="w-full accent-cyan-400">
+        <div id="inwardVal" class="text-right text-sm font-mono text-zinc-300">0.7</div>
       </div>
 
       <div>
@@ -63,28 +100,38 @@
         <div id="countVal" class="text-right text-sm font-mono text-zinc-300">1200</div>
       </div>
 
-      <div>
-        <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Stellar Temperature</label>
-        <input type="range" id="temp" min="7000" max="18000" step="250" value="9500" class="w-full accent-cyan-400">
-        <div id="tempVal" class="text-right text-sm font-mono text-zinc-300">9500 K</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Stellar Temperature</label>
+          <input type="range" id="temp" min="7000" max="18000" step="250" value="9500" class="w-full accent-cyan-400">
+          <div id="tempVal" class="text-right text-sm font-mono text-zinc-300">9500 K</div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Stellar Radius</label>
+          <input type="range" id="radius" min="1.5" max="6.5" step="0.1" value="2.4" class="w-full accent-cyan-400">
+          <div id="radiusVal" class="text-right text-sm font-mono text-zinc-300">2.4 R☉</div>
+        </div>
       </div>
 
-      <div>
-        <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Inclination</label>
-        <input type="range" id="inclination" min="12" max="78" step="1" value="28" class="w-full accent-cyan-400">
-        <div id="inclinationVal" class="text-right text-sm font-mono text-zinc-300">28°</div>
-      </div>
-
-      <div>
-        <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Turbulence</label>
-        <input type="range" id="turbulence" min="0" max="2" step="0.05" value="0.45" class="w-full accent-cyan-400">
-        <div id="turbulenceVal" class="text-right text-sm font-mono text-zinc-300">0.45</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Inclination</label>
+          <input type="range" id="inclination" min="12" max="82" step="1" value="32" class="w-full accent-cyan-400">
+          <div id="inclinationVal" class="text-right text-sm font-mono text-zinc-300">32°</div>
+        </div>
+        <div>
+          <label class="block text-xs uppercase mb-2 text-cyan-300 tracking-[0.2em]">Turbulence</label>
+          <input type="range" id="turbulence" min="0" max="1.8" step="0.05" value="0.35" class="w-full accent-cyan-400">
+          <div id="turbulenceVal" class="text-right text-sm font-mono text-zinc-300">0.35</div>
+        </div>
       </div>
 
       <div class="rounded-2xl border border-cyan-900/70 bg-zinc-900/70 p-4 text-xs leading-relaxed text-zinc-300 space-y-2">
-        <div class="flex justify-between gap-4"><span class="text-zinc-400">Dust sublimation rim</span><span id="rimVal" class="font-mono text-cyan-300">~46 px</span></div>
-        <div class="flex justify-between gap-4"><span class="text-zinc-400">Visual mode</span><span class="font-mono text-yellow-300">Flared dusty disk</span></div>
-        <div class="flex justify-between gap-4"><span class="text-zinc-400">Kinematic style</span><span class="font-mono text-cyan-300">Kepler-like shear</span></div>
+        <div class="flex justify-between gap-4"><span class="text-zinc-400">Luminosity</span><span id="lumVal" class="font-mono text-yellow-300">25.8 L☉</span></div>
+        <div class="flex justify-between gap-4"><span class="text-zinc-400">Dust sublimation rim</span><span id="rimVal" class="font-mono text-cyan-300">0.36 au</span></div>
+        <div class="flex justify-between gap-4"><span class="text-zinc-400">Visual mode</span><span id="modeVal" class="font-mono text-yellow-300">Herbig Ae</span></div>
+        <div class="flex justify-between gap-4"><span class="text-zinc-400">Outer structure</span><span id="geomVal" class="font-mono text-cyan-300">Flared dusty disk</span></div>
+        <div class="flex justify-between gap-4"><span class="text-zinc-400">Outflow style</span><span id="outflowVal" class="font-mono text-cyan-300">Disk wind</span></div>
       </div>
     </div>
 
@@ -92,23 +139,23 @@
       NEW HERBIG FACT
     </button>
 
-    <div id="fact" class="mt-5 text-xs leading-6 bg-zinc-900/80 p-5 rounded-2xl border border-cyan-900 min-h-[158px] text-zinc-200">
+    <div id="fact" class="mt-5 text-xs leading-6 bg-zinc-900/80 p-5 rounded-2xl border border-cyan-900 min-h-[168px] text-zinc-200">
       Click for a Herbig Ae/Be fact.
     </div>
 
     <div class="mt-5 grid grid-cols-2 gap-3 text-[11px] text-zinc-400">
       <div class="rounded-xl border border-zinc-800 p-3 bg-zinc-900/50">
         <div class="uppercase tracking-[0.18em] text-cyan-300 mb-1">Inner zone</div>
-        Hot dust rim + gas-rich cavity
+        Gas-rich cavity + hot sublimation wall
       </div>
       <div class="rounded-xl border border-zinc-800 p-3 bg-zinc-900/50">
         <div class="uppercase tracking-[0.18em] text-cyan-300 mb-1">Outer zone</div>
-        Flared scattering surface
+        Small-grain surface + settled midplane dust
       </div>
     </div>
 
     <div class="mt-auto text-[10px] opacity-40 text-center pt-6 tracking-[0.2em] uppercase">
-      research-vibe build • more physical, still stylish
+      research-vibe build • stylized, but physically guided
     </div>
   </aside>
 
@@ -118,15 +165,21 @@
 
     const CX = canvas.width / 2;
     const CY = canvas.height / 2;
+    const T_SUN = 5772;
 
     let particles = [];
-    let rotSpeed = 1.6;
-    let accRate = 0.9;
+    let occultors = [];
+    let rotSpeed = 1.3;
+    let accRate = 0.7;
     let temp = 9500;
-    let inclinationDeg = 28;
-    let turbulence = 0.45;
+    let stellarRadius = 2.4;
+    let inclinationDeg = 32;
+    let turbulence = 0.35;
     let particleCount = 1200;
     let frame = 0;
+    let sourceMode = 'ae';
+    let diskGeometry = 'flared';
+    let outflowMode = 'wind';
 
     function clamp(x, a, b) {
       return Math.max(a, Math.min(b, x));
@@ -134,6 +187,80 @@
 
     function lerp(a, b, t) {
       return a + (b - a) * t;
+    }
+
+    function modePreset() {
+      if (sourceMode === 'be') {
+        return {
+          label: 'Herbig Be',
+          mass: 5.5,
+          rimTemp: 1700,
+          cavityFactor: 0.22,
+          gapCenter: null,
+          gapWidth: 0,
+          gapDepth: 0,
+          occulting: false
+        };
+      }
+      if (sourceMode === 'transitional') {
+        return {
+          label: 'Transitional Disk',
+          mass: 2.5,
+          rimTemp: 1500,
+          cavityFactor: 0.34,
+          gapCenter: 175,
+          gapWidth: 34,
+          gapDepth: 0.84,
+          occulting: false
+        };
+      }
+      if (sourceMode === 'uxor') {
+        return {
+          label: 'UX Ori-like',
+          mass: 2.4,
+          rimTemp: 1450,
+          cavityFactor: 0.33,
+          gapCenter: null,
+          gapWidth: 0,
+          gapDepth: 0,
+          occulting: true
+        };
+      }
+      return {
+        label: 'Herbig Ae',
+        mass: 2.8,
+        rimTemp: 1500,
+        cavityFactor: 0.32,
+        gapCenter: null,
+        gapWidth: 0,
+        gapDepth: 0,
+        occulting: false
+      };
+    }
+
+    function geometryLabel() {
+      return diskGeometry === 'shadowed' ? 'Self-shadowed rim' : 'Flared dusty disk';
+    }
+
+    function outflowLabel() {
+      if (outflowMode === 'jet') return 'Collimated jet';
+      if (outflowMode === 'none') return 'None';
+      return 'Disk wind';
+    }
+
+    function luminosityLsun() {
+      return Math.pow(stellarRadius, 2) * Math.pow(temp / T_SUN, 4);
+    }
+
+    function sublimationRadiusAU() {
+      const preset = modePreset();
+      const L = luminosityLsun();
+      const base = 0.07 * Math.sqrt(Math.max(L, 1e-6)) * Math.pow(1500 / preset.rimTemp, 2);
+      return base * (sourceMode === 'be' ? 1.12 : 1.0);
+    }
+
+    function rimRadiusPx() {
+      return 28 + 30 * Math.sqrt(Math.max(sublimationRadiusAU(), 0.05));
     }
 
     function temperatureColor(T) {
@@ -144,37 +271,63 @@
       return `rgb(${r}, ${g}, ${b})`;
     }
 
-    function rimRadiusPx() {
-      return 42 + (temp - 7000) / 350;
-    }
-
     function verticalScale() {
       return Math.cos(inclinationDeg * Math.PI / 180);
     }
 
-    function flareHeight(r) {
-      const nr = clamp((r - rimRadiusPx()) / 260, 0, 1);
-      return (8 + 36 * Math.pow(nr, 1.35)) * (0.55 + turbulence * 0.55);
+    function flareHeight(r, grainType = 'small') {
+      const rim = rimRadiusPx();
+      const nr = clamp((r - rim) / 270, 0, 1);
+      const geomFactor = diskGeometry === 'shadowed'
+        ? (nr < 0.18 ? 1.25 : lerp(0.9, 0.42, nr))
+        : (0.9 + 0.85 * Math.pow(nr, 1.25));
+      const grainFactor = grainType === 'large' ? 0.36 : 1.0;
+      return (7 + 28 * Math.pow(nr, 1.28)) * geomFactor * grainFactor * (0.58 + turbulence * 0.52);
+    }
+
+    function rgba(rgb, alpha) {
+      return rgb.replace('rgb', 'rgba').replace(')', `, ${alpha})`);
+    }
+
+    function sampleDustRadius(grainType = 'small') {
+      const preset = modePreset();
+      const rim = rimRadiusPx();
+      const outer = grainType === 'large' ? 250 : 285;
+      let r;
+      let tries = 0;
+      do {
+        const power = grainType === 'large' ? 0.95 : 0.76;
+        r = rim + 14 + Math.pow(Math.random(), power) * outer;
+        tries++;
+        if (!preset.gapCenter) break;
+        const gapDepth = Math.exp(-0.5 * Math.pow((r - preset.gapCenter) / preset.gapWidth, 2)) * preset.gapDepth;
+        if (Math.random() > gapDepth) break;
+      } while (tries < 14);
+      return r;
     }
 
     class Particle {
-      constructor(layer = 'dust') {
+      constructor(layer = 'dustSmall') {
         this.layer = layer;
         this.reset(true);
       }
 
       reset(initial = false) {
         const rim = rimRadiusPx();
+        const preset = modePreset();
 
         if (this.layer === 'rim') {
-          this.radius = rim + Math.random() * 18;
-          this.size = Math.random() * 2.2 + 0.8;
+          this.radius = rim + Math.random() * 16;
+          this.size = Math.random() * 2.1 + 0.8;
         } else if (this.layer === 'gas') {
-          this.radius = rim * 0.55 + Math.random() * rim * 0.6;
-          this.size = Math.random() * 1.5 + 0.6;
+          this.radius = rim * preset.cavityFactor + Math.random() * rim * 0.72;
+          this.size = Math.random() * 1.35 + 0.55;
+        } else if (this.layer === 'dustLarge') {
+          this.radius = sampleDustRadius('large');
+          this.size = Math.random() * 1.9 + 0.85;
         } else {
-          this.radius = rim + 15 + Math.pow(Math.random(), 0.78) * 265;
-          this.size = Math.random() * 2.1 + 0.7;
+          this.radius = sampleDustRadius('small');
+          this.size = Math.random() * 1.7 + 0.55;
         }
 
         this.angle = Math.random() * Math.PI * 2;
@@ -191,15 +344,20 @@
       resetColor() {
         const rim = rimRadiusPx();
         if (this.layer === 'gas') {
-          this.h = 38 + Math.random() * 14;
-          this.s = 95;
-          this.l = 70 + Math.random() * 15;
+          this.h = 34 + Math.random() * 16;
+          this.s = 96;
+          this.l = 70 + Math.random() * 16;
         } else if (this.layer === 'rim') {
-          this.h = 30 + Math.random() * 18;
-          this.s = 90;
+          this.h = 28 + Math.random() * 16;
+          this.s = 92;
           this.l = 72 + Math.random() * 12;
+        } else if (this.layer === 'dustLarge') {
+          const rNorm = clamp((this.radius - rim) / 270, 0, 1);
+          this.h = lerp(38, 72, rNorm) + (Math.random() * 8 - 4);
+          this.s = lerp(62, 50, rNorm);
+          this.l = lerp(52, 42, rNorm);
         } else {
-          const rNorm = clamp((this.radius - rim) / 280, 0, 1);
+          const rNorm = clamp((this.radius - rim) / 285, 0, 1);
           this.h = lerp(34, 196, rNorm) + (Math.random() * 10 - 5);
           this.s = lerp(78, 66, rNorm);
           this.l = lerp(70, 60, rNorm);
@@ -207,61 +365,67 @@
       }
 
       angularVelocity() {
-        const effectiveR = Math.max(this.radius, 16);
-        const omega = 0.026 * rotSpeed * Math.pow(effectiveR / 90, -1.5);
-        return clamp(omega, 0.0035, 0.085);
+        const Mstar = modePreset().mass;
+        const effectiveR = Math.max(this.radius, 14);
+        const omega = 0.017 * rotSpeed * Math.sqrt(Mstar / 2.5) * Math.pow(effectiveR / 95, -1.5);
+        return clamp(omega, 0.0025, 0.075);
       }
 
       radialDrift() {
         const rim = rimRadiusPx();
         const rNorm = clamp((this.radius - rim) / 260, 0, 1);
-        return (0.02 + 0.22 * accRate) * (0.55 + 0.7 * (1 - rNorm));
+        if (this.layer === 'rim') return 0;
+        if (this.layer === 'gas') return (0.007 + 0.018 * accRate) * (0.9 + 0.45 * (1 - rNorm));
+        if (this.layer === 'dustLarge') return (0.002 + 0.012 * accRate) * (0.55 + 0.65 * (1 - rNorm));
+        return (0.0008 + 0.0042 * accRate) * (0.45 + 0.38 * (1 - rNorm));
       }
 
       update() {
         const rim = rimRadiusPx();
         this.angle += this.angularVelocity();
 
-        if (this.layer !== 'rim') {
-          this.radius -= this.radialDrift();
+        if (this.layer === 'rim') {
+          this.radius += Math.sin(frame * 0.012 + this.phase) * 0.025;
         } else {
-          this.radius += Math.sin(frame * 0.012 + this.phase) * 0.045;
+          this.radius -= this.radialDrift();
         }
 
-        if (this.layer === 'gas') {
-          this.radius -= 0.02 * accRate;
-        }
-
-        if (this.radius < rim * 0.45 || this.radius > 340) {
+        if (this.radius < rim * 0.2 || this.radius > 350) {
           this.reset();
         }
       }
 
       draw() {
         const vscale = verticalScale();
-        const spiralPerturb = 1 + 0.014 * Math.sin(this.angle * 2 - this.radius * 0.045 + frame * 0.01);
+        const grainType = this.layer === 'dustLarge' ? 'large' : 'small';
+        const spiralAmp = sourceMode === 'transitional' ? 0.01 : 0.013;
+        const spiralPerturb = 1 + spiralAmp * Math.sin(this.angle * 2 - this.radius * 0.045 + frame * 0.01);
         const r = this.radius * spiralPerturb;
         const baseX = CX + Math.cos(this.angle) * r;
         const baseY = CY + Math.sin(this.angle) * r * vscale;
-        const zJitter = Math.sin(frame * 0.015 + this.phase + this.offsetSeed) * flareHeight(this.radius) * 0.12;
+        const zJitter = Math.sin(frame * 0.013 + this.phase + this.offsetSeed) * flareHeight(this.radius, grainType) * 0.12;
         const y = baseY + zJitter;
         const x = baseX;
 
         const rim = rimRadiusPx();
-        const outerNorm = clamp((this.radius - rim) / 280, 0, 1);
-        const alphaBase = this.layer === 'gas'
-          ? 0.9
-          : this.layer === 'rim'
-            ? 0.72
-            : lerp(0.9, 0.38, outerNorm);
+        const outerNorm = clamp((this.radius - rim) / 285, 0, 1);
+        let alphaBase;
+        if (this.layer === 'gas') alphaBase = 0.74;
+        else if (this.layer === 'rim') alphaBase = 0.72;
+        else if (this.layer === 'dustLarge') alphaBase = lerp(0.5, 0.26, outerNorm);
+        else alphaBase = lerp(0.82, 0.34, outerNorm);
 
-        const shadow = y > CY ? 0.66 : 1.0;
-        const alpha = alphaBase * shadow * this.brightness;
-        const size = this.size * (this.layer === 'gas' ? 0.85 : 1.0) * (0.9 + 0.2 * Math.sin(this.phase + frame * 0.012));
+        if (diskGeometry === 'shadowed' && this.layer === 'dustSmall') {
+          alphaBase *= lerp(1.0, 0.62, outerNorm);
+        }
+
+        const nearFar = y > CY ? 0.68 : 1.0;
+        const alpha = alphaBase * nearFar * this.brightness;
+        const size = this.size * (this.layer === 'gas' ? 0.8 : 1.0) * (0.92 + 0.15 * Math.sin(this.phase + frame * 0.01));
 
         ctx.save();
         ctx.globalAlpha = alpha;
-        ctx.shadowBlur = this.layer === 'gas' ? 10 : this.layer === 'rim' ? 16 : 12;
+        ctx.shadowBlur = this.layer === 'gas' ? 10 : this.layer === 'rim' ? 16 : this.layer === 'dustLarge' ? 7 : 12;
         ctx.shadowColor = `hsla(${this.h}, ${this.s}%, ${this.l + 10}%, ${alpha})`;
         ctx.fillStyle = `hsl(${this.h}, ${this.s}%, ${this.l}%)`;
         ctx.beginPath();
@@ -273,18 +437,37 @@
 
     function buildParticles(total) {
       particles = [];
-      const rimCount = Math.max(80, Math.floor(total * 0.16));
-      const gasCount = Math.max(60, Math.floor(total * 0.12));
-      const dustCount = Math.max(120, total - rimCount - gasCount);
+      const rimCount = Math.max(90, Math.floor(total * 0.13));
+      const gasCount = Math.max(60, Math.floor(total * (sourceMode === 'be' ? 0.15 : 0.11)));
+      const largeCount = Math.max(110, Math.floor(total * 0.24));
+      const smallCount = Math.max(130, total - rimCount - gasCount - largeCount);
 
-      for (let i = 0; i < dustCount; i++) particles.push(new Particle('dust'));
+      for (let i = 0; i < smallCount; i++) particles.push(new Particle('dustSmall'));
+      for (let i = 0; i < largeCount; i++) particles.push(new Particle('dustLarge'));
       for (let i = 0; i < rimCount; i++) particles.push(new Particle('rim'));
       for (let i = 0; i < gasCount; i++) particles.push(new Particle('gas'));
+
+      buildOccultors();
+    }
+
+    function buildOccultors() {
+      occultors = [];
+      if (!modePreset().occulting) return;
+      for (let i = 0; i < 3; i++) {
+        occultors.push({
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.003 + Math.random() * 0.003,
+          width: 20 + Math.random() * 18,
+          height: 10 + Math.random() * 10,
+          alpha: 0.08 + Math.random() * 0.08,
+          radius: rimRadiusPx() + 8 + Math.random() * 14
+        });
+      }
     }
 
     function drawBackgroundStars() {
       ctx.save();
-      for (let i = 0; i < 80; i++) {
+      for (let i = 0; i < 86; i++) {
         const x = (i * 97) % canvas.width;
         const y = (i * 53) % canvas.height;
         const tw = 0.3 + 0.7 * Math.abs(Math.sin(frame * 0.01 + i));
@@ -305,21 +488,36 @@
       ctx.translate(CX, CY);
       ctx.scale(1, vscale);
 
-      const outer = ctx.createRadialGradient(0, 0, rim * 0.7, 0, 0, 315);
-      outer.addColorStop(0, 'rgba(255, 210, 140, 0.03)');
-      outer.addColorStop(0.22, 'rgba(255, 190, 120, 0.06)');
-      outer.addColorStop(0.5, 'rgba(75, 180, 220, 0.08)');
-      outer.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      const outer = ctx.createRadialGradient(0, 0, rim * 0.72, 0, 0, 320);
+      if (diskGeometry === 'shadowed') {
+        outer.addColorStop(0, 'rgba(255, 220, 160, 0.04)');
+        outer.addColorStop(0.18, 'rgba(255, 184, 110, 0.10)');
+        outer.addColorStop(0.36, 'rgba(70, 125, 160, 0.05)');
+        outer.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      } else {
+        outer.addColorStop(0, 'rgba(255, 210, 140, 0.03)');
+        outer.addColorStop(0.22, 'rgba(255, 190, 120, 0.07)');
+        outer.addColorStop(0.56, 'rgba(75, 180, 220, 0.09)');
+        outer.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      }
       ctx.fillStyle = outer;
       ctx.beginPath();
-      ctx.arc(0, 0, 315, 0, Math.PI * 2);
+      ctx.arc(0, 0, 320, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = 'rgba(255, 214, 170, 0.28)';
-      ctx.lineWidth = 10;
+      ctx.strokeStyle = diskGeometry === 'shadowed' ? 'rgba(255, 214, 170, 0.36)' : 'rgba(255, 214, 170, 0.28)';
+      ctx.lineWidth = diskGeometry === 'shadowed' ? 12 : 10;
       ctx.beginPath();
       ctx.arc(0, 0, rim + 8, 0, Math.PI * 2);
       ctx.stroke();
+
+      if (sourceMode === 'transitional') {
+        ctx.strokeStyle = 'rgba(125, 211, 252, 0.12)';
+        ctx.lineWidth = 20;
+        ctx.beginPath();
+        ctx.arc(0, 0, modePreset().gapCenter, 0, Math.PI * 2);
+        ctx.stroke();
+      }
 
       ctx.restore();
     }
@@ -330,51 +528,73 @@
       ctx.translate(CX, CY);
       ctx.scale(1, vscale);
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.22)';
-      ctx.lineWidth = 34;
+      ctx.lineWidth = 32 + 10 * (inclinationDeg / 80);
       ctx.beginPath();
-      ctx.ellipse(0, 0, 305, 86, 0, 0.2 * Math.PI, 0.8 * Math.PI);
+      ctx.ellipse(0, 0, 312, 90, 0, 0.2 * Math.PI, 0.8 * Math.PI);
       ctx.stroke();
       ctx.restore();
     }
 
-    function drawJets() {
+    function drawOutflow() {
+      if (outflowMode === 'none') return;
       const color = temperatureColor(temp);
       ctx.save();
-      ctx.globalAlpha = 0.18;
-      const jetLen = 170 + accRate * 36;
+      if (outflowMode === 'wind') {
+        ctx.globalAlpha = 0.15;
+        const len = 150 + accRate * 18;
+        const spread = 55;
+        for (const s of [-1, 1]) {
+          const grad = ctx.createLinearGradient(CX, CY, CX + s * spread, CY - len);
+          grad.addColorStop(0, rgba(color, 0.20));
+          grad.addColorStop(1, 'rgba(125, 211, 252, 0)');
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 3.5;
+          ctx.beginPath();
+          ctx.moveTo(CX, CY - 10);
+          ctx.quadraticCurveTo(CX + s * 18, CY - 60, CX + s * spread, CY - len);
+          ctx.stroke();
 
-      const gradUp = ctx.createLinearGradient(CX, CY - 18, CX, CY - jetLen);
-      gradUp.addColorStop(0, color.replace('rgb', 'rgba').replace(')', ', 0.24)'));
-      gradUp.addColorStop(1, 'rgba(125, 211, 252, 0)');
-      ctx.strokeStyle = gradUp;
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(CX, CY - 12);
-      ctx.lineTo(CX, CY - jetLen);
-      ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(CX, CY + 10);
+          ctx.quadraticCurveTo(CX + s * 18, CY + 60, CX + s * spread, CY + len);
+          ctx.stroke();
+        }
+      } else {
+        ctx.globalAlpha = 0.18;
+        const jetLen = 175 + accRate * 30;
+        const gradUp = ctx.createLinearGradient(CX, CY - 18, CX, CY - jetLen);
+        gradUp.addColorStop(0, rgba(color, 0.25));
+        gradUp.addColorStop(1, 'rgba(125, 211, 252, 0)');
+        ctx.strokeStyle = gradUp;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(CX, CY - 12);
+        ctx.lineTo(CX, CY - jetLen);
+        ctx.stroke();
 
-      const gradDown = ctx.createLinearGradient(CX, CY + 18, CX, CY + jetLen);
-      gradDown.addColorStop(0, color.replace('rgb', 'rgba').replace(')', ', 0.18)'));
-      gradDown.addColorStop(1, 'rgba(125, 211, 252, 0)');
-      ctx.strokeStyle = gradDown;
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(CX, CY + 12);
-      ctx.lineTo(CX, CY + jetLen);
-      ctx.stroke();
+        const gradDown = ctx.createLinearGradient(CX, CY + 18, CX, CY + jetLen);
+        gradDown.addColorStop(0, rgba(color, 0.18));
+        gradDown.addColorStop(1, 'rgba(125, 211, 252, 0)');
+        ctx.strokeStyle = gradDown;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(CX, CY + 12);
+        ctx.lineTo(CX, CY + jetLen);
+        ctx.stroke();
+      }
       ctx.restore();
     }
 
     function drawStar() {
       const starColor = temperatureColor(temp);
       const t = clamp((temp - 7000) / 11000, 0, 1);
-      const coreRadius = lerp(26, 34, t);
-      const glowRadius = lerp(80, 110, t);
+      const coreRadius = lerp(24, 34, t) * Math.pow(stellarRadius / 2.4, 0.16);
+      const glowRadius = lerp(78, 115, t) * Math.pow(stellarRadius / 2.4, 0.16);
 
       ctx.save();
 
       const halo = ctx.createRadialGradient(CX, CY, 8, CX, CY, glowRadius);
-      halo.addColorStop(0, starColor.replace('rgb', 'rgba').replace(')', ', 0.95)'));
+      halo.addColorStop(0, rgba(starColor, 0.95));
       halo.addColorStop(0.35, 'rgba(255, 229, 160, 0.30)');
       halo.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = halo;
@@ -391,17 +611,34 @@
       ctx.arc(CX, CY, coreRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.globalAlpha = 0.18;
+      ctx.globalAlpha = 0.16;
       ctx.strokeStyle = 'rgba(255,255,255,0.8)';
       ctx.lineWidth = 1.1;
       for (let i = 0; i < 6; i++) {
         const a = frame * 0.01 + i * Math.PI / 3;
         ctx.beginPath();
         ctx.moveTo(CX + Math.cos(a) * 12, CY + Math.sin(a) * 12);
-        ctx.lineTo(CX + Math.cos(a) * (glowRadius * 0.6), CY + Math.sin(a) * (glowRadius * 0.6));
+        ctx.lineTo(CX + Math.cos(a) * (glowRadius * 0.58), CY + Math.sin(a) * (glowRadius * 0.58));
         ctx.stroke();
       }
 
+      ctx.restore();
+    }
+
+    function drawOccultation() {
+      if (!modePreset().occulting || inclinationDeg < 52) return;
+      ctx.save();
+      for (const occ of occultors) {
+        const a = frame * occ.speed + occ.phase;
+        const x = CX + Math.cos(a) * occ.radius;
+        const y = CY + Math.sin(a) * occ.radius * verticalScale();
+        if (Math.abs(x - CX) < 55 && Math.abs(y - CY) < 45) {
+          ctx.fillStyle = `rgba(18, 18, 18, ${occ.alpha + 0.02 * (inclinationDeg / 80)})`;
+          ctx.beginPath();
+          ctx.ellipse(x, y, occ.width, occ.height, a, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
       ctx.restore();
     }
 
@@ -419,7 +656,7 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       drawBackgroundStars();
-      drawJets();
+      drawOutflow();
       drawDiskGlow();
 
       particles.sort((a, b) => {
@@ -435,6 +672,7 @@
 
       drawMidplaneLane();
       drawStar();
+      drawOccultation();
       drawVignette();
 
       requestAnimationFrame(animate);
@@ -450,10 +688,24 @@
       });
     }
 
+    function wireSelect(id, callback) {
+      document.getElementById(id).addEventListener('change', (e) => callback(e.target.value));
+    }
+
+    function refreshDerivedLabels() {
+      document.getElementById('lumVal').textContent = `${luminosityLsun().toFixed(1)} L☉`;
+      document.getElementById('rimVal').textContent = `${sublimationRadiusAU().toFixed(2)} au`;
+      document.getElementById('modeVal').textContent = modePreset().label;
+      document.getElementById('geomVal').textContent = geometryLabel();
+      document.getElementById('outflowVal').textContent = outflowLabel();
+      particles.forEach(p => p.resetColor());
+    }
+
     const facts = [
       'Herbig Ae/Be stars are pre-main-sequence stars of roughly 2–8 solar masses, bridging the gap between T Tauri stars and more massive young stars.',
       'Their strong infrared excess comes from dusty circumstellar disks that absorb stellar radiation and reradiate it at longer wavelengths.',
       'The inner dust disk is truncated at the sublimation radius, where grains heat to roughly 1500 K and cannot survive closer in.',
+      'A more luminous star pushes the dust sublimation wall farther out, so the inner rim size scales strongly with stellar luminosity.',
       'Many Herbig Ae/Be stars show Hα emission, a classic sign that gas is still actively accreting onto the star.',
       'Brγ at 2.166 μm is one of the most widely used near-infrared tracers of ongoing accretion in intermediate-mass young stars.',
       'Balmer-excess measurements are another major way to estimate accretion rates in Herbig Ae/Be systems.',
@@ -461,6 +713,7 @@
       'For hotter and more massive systems, boundary-layer accretion becomes an important alternative to pure magnetospheric funnel flows.',
       'Interferometry can resolve the au-scale inner disk structure of Herbig Ae/Be stars, including puffed-up inner rims.',
       'The disk surface is often flared, which helps it intercept more stellar radiation and enhances scattered light and infrared emission.',
+      'A self-shadowed disk can have a bright inner rim but a relatively dimmer outer disk because less stellar light reaches large radii.',
       'Inclination matters a lot: the same disk can look very different in its spectrum and light curve depending on viewing angle.',
       'UX Ori-type variability is thought to arise when dusty clumps in inclined disks temporarily obscure the star.',
       'Herbig disks can contain gaps, rings, cavities, and spiral structures, making them prime laboratories for early planet formation.',
@@ -472,8 +725,10 @@
       'PAH emission is usually stronger in systems where the stellar UV field can illuminate the disk surface directly.',
       'Silicate emission around 10 μm reveals information about grain growth, crystallinity, and dust processing in the disk surface layers.',
       'As grains grow and settle, the infrared spectral shape of the disk changes, carrying clues about the earliest stages of planet formation.',
+      'Large grains are expected to settle closer to the midplane than small grains, so different grain populations should not share the same vertical structure.',
       'Companions can warp, truncate, or carve gaps in Herbig Ae/Be disks, strongly reshaping their morphology and variability.',
       'Jets from young stars are commonly aligned with the rotation axis of the inner disk, perpendicular to the disk midplane.',
+      'Disk winds may be broader and less collimated than jets, so they should not be visualized in exactly the same way.',
       'The near side and far side of an inclined flared disk scatter and absorb light differently, which is why realistic disks are not perfectly symmetric.',
       'Herbig Ae/Be stars can vary on timescales from hours to years because of accretion changes, occultations, and inner-disk structure.',
       'Gaia distances have greatly improved luminosity, age, and mass estimates for Herbig Ae/Be stars and their surrounding populations.',
@@ -481,7 +736,6 @@
       'The star-disk boundary region is crucial because that is where mass, angular momentum, magnetic fields, and radiation all interact.',
       'A purely Keplerian disk rotates faster at small radii, which is why realistic particle motion should shear differentially instead of spinning like a solid plate.',
       'Inner-rim emission can dominate the near-infrared SED, especially when the hot dust wall is directly illuminated by the central star.',
-      'Disk winds may contribute to some permitted and forbidden emission lines, making spectroscopy a powerful way to disentangle inflow and outflow.',
       'Herbig Ae/Be disks are ideal targets for combining spectroscopy, interferometry, imaging, and mid-infrared chemistry in one physical picture.'
     ];
 
@@ -489,6 +743,22 @@
       const factEl = document.getElementById('fact');
       const idx = Math.floor(Math.random() * facts.length);
       factEl.textContent = facts[idx];
+    });
+
+    wireSelect('mode', v => {
+      sourceMode = v;
+      buildParticles(particleCount);
+      refreshDerivedLabels();
+    });
+
+    wireSelect('geometry', v => {
+      diskGeometry = v;
+      refreshDerivedLabels();
+    });
+
+    wireSelect('outflow', v => {
+      outflowMode = v;
+      refreshDerivedLabels();
     });
 
     wireSlider('speed', v => `${v.toFixed(1)}×`, v => { rotSpeed = v; });
@@ -499,20 +769,28 @@
     });
     wireSlider('temp', v => `${Math.round(v)} K`, v => {
       temp = v;
-      document.getElementById('rimVal').textContent = `~${Math.round(rimRadiusPx())} px`;
-      particles.forEach(p => p.resetColor());
+      buildParticles(particleCount);
+      refreshDerivedLabels();
+    });
+    wireSlider('radius', v => `${v.toFixed(1)} R☉`, v => {
+      stellarRadius = v;
+      buildParticles(particleCount);
+      refreshDerivedLabels();
     });
     wireSlider('inclination', v => `${Math.round(v)}°`, v => { inclinationDeg = v; });
     wireSlider('turbulence', v => v.toFixed(2), v => { turbulence = v; });
 
     window.onload = () => {
-      document.getElementById('rimVal').textContent = `~${Math.round(rimRadiusPx())} px`;
+      document.getElementById('mode').value = sourceMode;
+      document.getElementById('geometry').value = diskGeometry;
+      document.getElementById('outflow').value = outflowMode;
       buildParticles(particleCount);
+      refreshDerivedLabels();
       document.getElementById('fact').textContent = facts[0];
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       animate();
-      console.log('%cAccretionVibe loaded — upgraded Herbig Ae/Be mode', 'color:#67e8f9; font-family:monospace');
+      console.log('%cAccretionVibe loaded — luminosity-guided Herbig mode', 'color:#67e8f9; font-family:monospace');
     };
   </script>
 </body>
